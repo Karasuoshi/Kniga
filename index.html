@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мираж — Дети двух миров</title>
+<meta name="description" content="Невидимый город Мираж и Академия волшебных наук. Сайт книги «Дети двух миров».">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Дети двух миров">
+<meta property="og:title" content="Мираж — Дети двух миров">
+<meta property="og:description" content="Невидимый город. Обычный человек проедет мимо и ничего не заметит.">
+<meta property="og:url" content="https://karasuoshi.github.io/Kniga/">
+<link rel="icon" href="img/logo-arch.svg?v=1" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css?v=2">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top"><img src="img/logo-arch.svg?v=1" alt="" width="22" height="26">Дети двух миров</a>
+    <nav id="nav" aria-label="Разделы"></nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="city" id="city-art"></div>
+  <div class="hero-text"><div class="wrap"><div class="in">
+    <span class="eyebrow" id="hero-eyebrow"></span>
+    <h1 id="hero-title"></h1>
+    <p id="hero-text"></p>
+    <div class="actions">
+      <button class="btn solid" id="eyes" aria-pressed="false" hidden></button>
+      <a class="btn line" href="#academy" id="hero-academy"></a>
+    </div>
+  </div></div></div>
+  <div class="note" id="hero-note" aria-live="polite"></div>
+</section>
+
+<main class="wrap">
+  <section class="block" id="city">
+    <div class="head" id="city-head"></div>
+    <div class="facts" id="facts"></div>
+  </section>
+
+  <section class="block" id="academy">
+    <div class="academy">
+      <div class="head" id="academy-head" style="margin:0"></div>
+      <div class="ledger" id="ledger"></div>
+    </div>
+    <div class="places" id="places"></div>
+  </section>
+
+  <section class="block" id="faculties">
+    <div class="head" id="fac-head"></div>
+    <div class="faculties" id="fac-list"></div>
+  </section>
+
+  <section class="block" id="characters">
+    <div class="head" id="kids-head"></div>
+    <div class="kids" id="kids"></div>
+    <p class="portrait-note" id="kids-note"></p>
+  </section>
+
+  <section class="block" id="glossary">
+    <div class="head" id="gloss-head"></div>
+    <dl class="gloss" id="gloss"></dl>
+  </section>
+</main>
+
+<footer class="wrap" id="footer"></footer>
+
+<dialog id="dlg" aria-labelledby="dlg-name">
+  <button class="x" id="dlg-close" aria-label="Закрыть">×</button>
+  <div id="dlg-body"></div>
+</dialog>
+
+<noscript><p style="padding:16px">Для просмотра сайта включите JavaScript.</p></noscript>
+<script src="assets/content.js?v=2"></script>
+<script src="assets/site.js?v=2"></script>
+</body>
+</html>
