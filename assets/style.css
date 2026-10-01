@@ -41,26 +41,37 @@ nav{display:flex; flex-wrap:wrap; gap:2px 18px; font-weight:600; font-size:.92re
 nav a{text-decoration:none; color:var(--muted); padding:4px 0}
 nav a:hover, nav a:focus-visible{color:var(--ink)}
 
-/* главный экран */
-.hero{position:relative; height:clamp(560px, 64vw, 760px); overflow:hidden; background:linear-gradient(var(--sky-top), var(--sky-bot))}
-.hero .city{position:absolute; inset:0}
+/* главный экран: книга и герои; небо на весь фон, полоса города внизу */
+.hero{--band:clamp(290px, 31.25vw, 500px); position:relative; overflow:hidden; background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bot) 80%)}
+.hero .sky{position:absolute; inset:0}
+.hero .sky img{display:block; width:100%; height:100%; object-fit:cover; object-position:50% 0}
+.hero .city{position:absolute; left:0; right:0; bottom:0; height:var(--band)}
 .hero .city svg, .hero .city img{position:absolute; inset:0; width:100%; height:100%; display:block; object-fit:cover; object-position:50% 100%}
 .hero #mirage, .hero #mirage2{transition:opacity 1.6s ease, filter 1.6s ease}
 .hero #lights{transition:opacity 1.6s ease}
 .hero.ordinary #mirage, .hero.ordinary #mirage2{opacity:0; filter:blur(10px)}
 .hero.ordinary #lights{opacity:0}
 @media (prefers-reduced-motion:reduce){ .hero #mirage, .hero #mirage2, .hero #lights{transition:none} }
-.hero-text{position:absolute; left:0; right:0; top:0; padding-top:clamp(28px,5vw,64px); color:var(--hero-ink)}
-.hero-text .in{max-width:31rem; display:flex; flex-direction:column; gap:10px}
-.hero h1{font-size:clamp(3.6rem,9vw,7rem); line-height:.86; font-weight:700; letter-spacing:-.01em}
-.hero p{margin:0; font-size:1.08rem; font-weight:500; max-width:26rem}
+.hero-text{position:relative; z-index:1; padding-block:clamp(36px,5.5vw,72px) calc(var(--band) - 10px); color:var(--hero-ink)}
+.hero-text .in{max-width:44rem; display:flex; flex-direction:column; gap:14px}
+.hero h1{font-size:clamp(3.2rem,8.4vw,6.6rem); line-height:.88; font-weight:700; letter-spacing:-.01em}
+.hero p{margin:0; font-size:1.12rem; font-weight:500; max-width:34rem}
 .hero .eyebrow{font-family:var(--sc); font-weight:700; letter-spacing:.14em; font-size:.95rem}
-.hero .actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px}
+.hero .actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:4px}
+.lineup{display:flex; flex-wrap:wrap; gap:8px 10px; margin-top:6px}
+.lineup button{all:unset; box-sizing:border-box; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:5px; width:66px}
+.mini{position:relative; overflow:hidden; width:56px; aspect-ratio:4/4.8; border-radius:50% 50% 3px 3px / 36% 36% 3px 3px; border:3px solid var(--surface); box-shadow:0 6px 14px -8px rgba(0,0,0,.5);
+  background:radial-gradient(70% 55% at 50% 62%, color-mix(in srgb, var(--c) 45%, #FFE7B0) 0%, var(--c) 72%, color-mix(in srgb, var(--c) 70%, #000) 100%); display:grid; place-items:center; transition:transform .2s ease}
+.mini .sym{width:58%; aspect-ratio:1; background:#FFF6DE; -webkit-mask:var(--src) center/contain no-repeat; mask:var(--src) center/contain no-repeat}
+.mini .portrait{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+.lineup span:last-child{font-size:.78rem; font-weight:700; color:var(--hero-ink); white-space:nowrap}
+.lineup button:hover .mini{transform:translateY(-4px)}
+.lineup button:focus-visible .mini{outline:3px solid var(--gold); outline-offset:2px}
 .btn{font:inherit; font-weight:700; font-size:.92rem; padding:10px 18px; border-radius:999px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px}
 .btn.solid{background:var(--ink); color:var(--bg); border:0}
 .btn.line{background:transparent; color:var(--hero-ink); border:1.5px solid currentColor}
 .btn:focus-visible{outline:3px solid var(--gold); outline-offset:3px}
-.note{position:absolute; left:50%; bottom:18%; transform:translateX(-50%); font-family:var(--display); font-style:italic; font-size:1.35rem; color:var(--hero-ink); opacity:0; transition:opacity 1.2s ease .6s; pointer-events:none; text-align:center; width:max-content; max-width:90%}
+.note{position:absolute; z-index:2; left:50%; bottom:calc(var(--band) * .42); transform:translateX(-50%); font-family:var(--display); font-style:italic; font-size:1.35rem; color:var(--hero-ink); opacity:0; transition:opacity 1.2s ease .6s; pointer-events:none; text-align:center; width:max-content; max-width:90%}
 .hero.ordinary .note{opacity:1}
 
 /* город */
@@ -71,7 +82,7 @@ nav a:hover, nav a:focus-visible{color:var(--ink)}
 .fact p{margin:0; color:var(--muted)}
 
 /* академия */
-.academy{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:40px; align-items:end}
+.academy{max-width:46rem}
 .ledger{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid var(--line)}
 .ledger div{padding:16px 0; border-bottom:1px solid var(--line); display:flex; flex-direction:column}
 .ledger div:nth-child(odd){padding-right:16px}
@@ -120,6 +131,7 @@ nav a:hover, nav a:focus-visible{color:var(--ink)}
 .win .portrait{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
 .kid h3{font-size:1.7rem; line-height:1}
 .kid .tag{margin:0; color:var(--muted); font-size:.95rem}
+.kid .chips{margin-top:2px}
 .kid .from{font-size:.75rem; font-weight:700; color:var(--muted); letter-spacing:.04em}
 .kid .meta{display:flex; flex-direction:column; gap:6px}
 .portrait-note{margin-top:30px; color:var(--muted); font-size:.92rem; border-left:3px solid var(--gold); padding-left:14px; max-width:62ch}
@@ -153,13 +165,12 @@ dialog::backdrop{background:rgba(10,14,10,.62)}
 @media (max-width:980px){
   .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
   .places{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .academy, .faculties{grid-template-columns:minmax(0,1fr)}
+  .faculties{grid-template-columns:minmax(0,1fr)}
   .kids{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:620px){
   .top{position:static}
   html{scroll-padding-top:0}
-  .hero{height:780px}
   .fac{grid-template-columns:minmax(0,1fr)}
   .fac .art img{height:auto}
   .places{grid-template-columns:minmax(0,1fr)}

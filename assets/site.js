@@ -25,13 +25,14 @@
   $('hero-eyebrow').textContent = H.eyebrow;
   $('hero-title').textContent = H.title;
   $('hero-text').textContent = H.text;
-  $('hero-academy').textContent = H.btnAcademy;
+  $('hero-heroes').textContent = H.btnHeroes;
   $('hero-note').textContent = H.note;
   var eyes = $('eyes'), city = $('city-art');
   eyes.textContent = H.btnOrdinary;
-  eyes.hidden = true;
-  /* картинку города вставляем прямо в страницу, чтобы работала кнопка «Глазами обычного человека» */
-  fetch(src(H.img)).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (t) {
+  /* небо — обычная картинка на весь фон */
+  $('sky-art').innerHTML = '<img src="' + src(H.sky) + '" alt="">';
+  /* полосу города вставляем прямо в страницу, чтобы работала кнопка «Глазами обычного человека» */
+  fetch(src(H.city)).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (t) {
     city.innerHTML = t;
     var svg = city.querySelector('svg');
     if (!svg) throw 0;
@@ -39,7 +40,7 @@
     svg.removeAttribute('width'); svg.removeAttribute('height');
     if (svg.querySelector('#mirage')) eyes.hidden = false;
   }).catch(function () {
-    city.innerHTML = '<img src="' + src(H.img) + '" alt="' + esc(H.alt) + '">';
+    city.innerHTML = '<img src="' + src(H.city) + '" alt="' + esc(H.alt) + '">';
   });
   eyes.addEventListener('click', function () {
     var on = hero.classList.toggle('ordinary');
@@ -49,7 +50,7 @@
 
   /* ---------- город ---------- */
   var C = S.city;
-  $('city-head').innerHTML = '<span class="kicker">' + esc(C.kicker) + '</span><h2>' + esc(C.title) + '</h2>';
+  $('city-head').innerHTML = '<span class="kicker">' + esc(C.kicker) + '</span><h2>' + esc(C.title) + '</h2>' + (C.lead ? '<p class="lead">' + esc(C.lead) + '</p>' : '');
   $('facts').innerHTML = C.facts.map(function (f) {
     return '<div class="fact" style="color:var(--' + esc(f.color) + ')"><svg viewBox="0 0 64 64" aria-hidden="true">' + (ICON[f.icon] || '') + '</svg>' +
       '<h3>' + esc(f.title) + '</h3><p>' + esc(f.text) + '</p></div>';
@@ -59,7 +60,6 @@
   var A = S.academy;
   $('academy-head').innerHTML = '<span class="kicker">' + esc(A.kicker) + '</span><h2>' + esc(A.title) + '</h2>' +
     '<p class="lead">' + esc(A.lead1) + '</p><p class="sign">' + esc(A.sign) + '</p><p class="lead">' + esc(A.lead2) + '</p>';
-  $('ledger').innerHTML = A.numbers.map(function (n) { return '<div><b>' + esc(n[0]) + '</b><span>' + esc(n[1]) + '</span></div>'; }).join('');
   $('places').innerHTML = A.places.map(function (p) {
     return '<article class="place"><div class="pic">' + (p.img ? '<img src="' + src(p.img) + '" alt="' + esc(p.title) + '" loading="lazy">' : '') + '</div>' +
       '<h3>' + esc(p.title) + '</h3>' + (p.rule ? '<span class="rule">' + esc(p.rule) + '</span>' : '') + '<p>' + esc(p.text) + '</p></article>';
@@ -79,17 +79,28 @@
   /* ---------- персонажи ---------- */
   var K = S.characters;
   $('kids-head').innerHTML = '<span class="kicker">' + esc(K.kicker) + '</span><h2>' + esc(K.title) + '</h2><p class="lead">' + esc(K.lead) + '</p>';
+  function symUrl(p) { return esc(new URL(p + '?v=' + S.imgV, document.baseURI).href); }
+  function isSym(p) { return /(^|\/)symbol-[^\/]+\.svg$/.test(p); }
   function wins(k) {
     return '<div class="wins">' + k.img.map(function (p) {
-      var isSym = /(^|\/)symbol-[^\/]+\.svg$/.test(p);
-      return '<div class="win" style="--c:' + esc(k.c) + '">' + (isSym
-        ? '<i class="sym" style="--src:url(\'' + esc(new URL(p + '?v=' + S.imgV, document.baseURI).href) + '\')" aria-hidden="true"></i>'
+      return '<div class="win" style="--c:' + esc(k.c) + '">' + (isSym(p)
+        ? '<i class="sym" style="--src:url(\'' + symUrl(p) + '\')" aria-hidden="true"></i>'
         : '<img class="portrait" src="' + src(p) + '" alt="' + esc(k.name) + '" loading="lazy">') + '</div>';
     }).join('') + '</div>';
   }
   $('kids').innerHTML = K.list.map(function (k) {
     return '<button class="kid' + (k.wide ? ' wide' : '') + '" data-open="' + esc(k.id) + '" aria-label="Открыть: ' + esc(k.name) + '">' + wins(k) +
-      '<div class="meta"><h3>' + esc(k.name) + '</h3><p class="tag">' + esc(k.tag) + '</p><span class="from">' + esc(K.from) + '</span></div></button>';
+      '<div class="meta"><h3>' + esc(k.name) + '</h3><p class="tag">' + esc(k.tag) + '</p>' +
+      '<div class="chips">' + k.traits.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div>' +
+      '<span class="from">' + esc(K.from) + '</span></div></button>';
+  }).join('');
+  /* ряд маленьких окон героев на главном экране */
+  $('lineup').innerHTML = K.list.map(function (k) {
+    return k.img.map(function (p, j) {
+      var n = k.names ? k.names[j] : k.name;
+      var inner = isSym(p) ? '<i class="sym" style="--src:url(\'' + symUrl(p) + '\')"></i>' : '<img class="portrait" src="' + src(p) + '" alt="">';
+      return '<button data-open="' + esc(k.id) + '" aria-label="' + esc(n) + ': открыть страницу героя"><span class="mini" style="--c:' + esc(k.c) + '" aria-hidden="true">' + inner + '</span><span>' + esc(n) + '</span></button>';
+    }).join('');
   }).join('');
   $('kids-note').textContent = K.note;
 
